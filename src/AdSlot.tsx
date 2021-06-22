@@ -1,5 +1,4 @@
 import React from 'react'
-import './AdSlot.css'
 import { useDisplayAd } from './hooks/useDisplayAd'
 
 interface Props {
@@ -15,6 +14,7 @@ const AdSlot = ({ classNames, dataAttributes, slotId, slotName}: Props) => {
         <div
             id={slotId}
             className={classNames}
+            data-name={slotName}
             aria-hidden='true'
         >
             {slotName} loading: {String(isLoading)}

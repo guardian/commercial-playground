@@ -1,6 +1,7 @@
 import React from 'react'
 import { AdSlot } from './AdSlot';
 import { Slots } from './lib/slots'
+import './AdSlotTopAboveNav.css'
 
 const AdSlotTopAboveNav = () => {
    return (
