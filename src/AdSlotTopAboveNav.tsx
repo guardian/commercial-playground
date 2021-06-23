@@ -5,12 +5,15 @@ import './AdSlotTopAboveNav.css'
 
 const AdSlotTopAboveNav = () => {
    return (
-        <AdSlot
-            classNames={['js-ad-slot', 'ad-slot', 'ad-slot--top-above-nav', 'ad-slot--mpu-banner-ad', 'ad-slot--rendered'].join(' ')}
-            dataAttributes={[['name', 'ad slot top-above-nav']]}
-            slotId='dfp-ad--top-above-nav'
-            slotName={Slots.topAboveNav}
-        />
+        <div style={{ gridArea: 'header'}}>
+            <AdSlot
+                classNames={['js-ad-slot', 'ad-slot', 'ad-slot--top-above-nav', 'ad-slot--mpu-banner-ad', 'ad-slot--rendered'].join(' ')}
+                dataAttributes={[['name', 'ad slot top-above-nav']]}
+                slotId='dfp-ad--top-above-nav'
+                slotName={Slots.topAboveNav}
+                
+            />
+        </div>
     )
 }
 

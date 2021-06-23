@@ -5,7 +5,7 @@ import './AdSlotRight.css'
 
 const AdSlotRight = () => {
    return (
-        <div style={{ position: 'static', height: '1059px', width: '200px'}}>
+        <div style={{ gridArea: 'right', position: 'static', height: '1059px', width: '200px'}}>
             <AdSlot
                 classNames={['js-ad-slot', 'ad-slot', 'ad-slot--right', 'ad-slot--mpu-banner-ad', 'ad-slot--rendered', 'js-sticky-mpu'].join(' ')}
                 dataAttributes={[['link-name', 'ad slot right']]}
