@@ -1,13 +1,13 @@
 import React from 'react'
-import { AdSlotTopAboveNav } from './AdSlotTopAboveNav'
-import { AdSlotRight } from './AdSlotRight'
-import Layout from './Layout'
+import { Layout } from './Layout'
+import { Article } from './Article'
+import { Header } from './Header'
 
 function App() {
   return (
     <Layout>
-      <AdSlotTopAboveNav />
-      <AdSlotRight />
+      <Header />
+      <Article />
     </Layout>
   )
 }
