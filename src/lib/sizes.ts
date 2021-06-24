@@ -8,7 +8,7 @@ const AdSizes = {
 	skyscraper : [160,600],
 	mobilesticky : [320,50],
 	// dfp proprietary ad sizes
-	fluid : ["fluid"],
+	fluid : "fluid",
 	outOfPage : [1,1],
 	googleCard : [300,274],
 	// guardian proprietary ad sizes
@@ -24,14 +24,14 @@ const AdSizes = {
 	empty : [2,2],
 }
 
-const Sizes = {
+const Sizes: { [key: string]: any } = {
 	'top-above-nav': {
 		'desktop': [
 			AdSizes.outOfPage,
 			AdSizes.empty,
 			AdSizes.leaderboard,
-			'940,230',
-			'900,250',
+			[940,230],
+			[900,250],
 			AdSizes.billboard,
 			AdSizes.fabric,
 			AdSizes.fluid,
@@ -44,8 +44,30 @@ const Sizes = {
 			AdSizes.leaderboard,
 		]
 	},
+	'right': {
+		'desktop': [
+			AdSizes.outOfPage,
+			AdSizes.empty,
+			AdSizes.mpu,
+			AdSizes.googleCard,
+			AdSizes.halfPage,
+			AdSizes.fluid,
+		]
+	}
+}
+
+const SizeMappings: { [key: string]: any } = {
+	'top-above-nav': [
+		[[980,0]],
+		Sizes['top-above-nav'].desktop,
+	],
+	'right': [
+		[[0,0]],
+		Sizes['right'].desktop,
+	]
 }
 
 export {
 	Sizes,
+	SizeMappings,
 }

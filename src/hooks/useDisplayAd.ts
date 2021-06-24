@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getGoogleTag } from '../lib/googletag';
-import { Sizes } from '../lib/sizes';
-import { Slots } from '../lib/slots';
+import { Sizes, SizeMappings } from '../lib/sizes';
 
 const useDisplayAd = (id: string, name: string) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -13,8 +12,9 @@ const useDisplayAd = (id: string, name: string) => {
               // Define an ad slot
               // Ad unit path, size, div id
               // Ad unit path follows the format /network-code/[parent-ad-unit-code/.../]ad-unit-code, where:
-              '59666047/theguardian.com/uk/front/ng', Sizes["top-above-nav"].desktop, id)
+              '59666047/theguardian.com/uk/front/ng', Sizes[name].desktop, id)
             // add a service to the slot e.g. pubads service
+            .defineSizeMapping(SizeMappings[name])
             .addService(googletag.pubads());
             googletag.enableServices();
             googletag.display(id);
