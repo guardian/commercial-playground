@@ -16,8 +16,15 @@ const articleLayout = {
 const Article = () => {
     return (
         <div style={articleLayout}>
-            <div style={{ gridArea: 'articlel' }}></div>
+            <div style={{ gridArea: 'articlel', paddingLeft: '1rem', paddingTop: '0.5rem' }}>
+                <div style={{ fontSize: '1.25rem', color: '#C70000', fontWeight: 700 }}>
+                    Commercial Dev
+                </div>
+            </div>
             <div style={{ gridArea: 'article', borderLeft: '1px solid lightgrey', paddingLeft: '1rem' }}>
+                <div style={{ fontSize: '2.5rem' }}>
+                    Something about something
+                </div>
                 <Lorem />
             </div>
             <div style={{ gridArea: 'articler' }}>
