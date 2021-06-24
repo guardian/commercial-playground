@@ -5,10 +5,10 @@ function Layout({ children }: { children: ReactChild[]}) {
     <div
         style={{
             display: 'grid',
-            gridTemplate: '"headerl headerad headerr"  "left article right"',
+            gridTemplate: '"headerl headerad headerr" "nav nav nav" "left article right"',
             gap: '0.5rem',
             gridTemplateColumns: '4rem auto 4rem',
-            gridTemplateRows: 'minmax(192px, auto) auto',
+            gridTemplateRows: 'minmax(192px, auto) 180px auto',
         }}
     >
         {children}
