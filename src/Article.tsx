@@ -6,15 +6,18 @@ const articleLayout = {
     display: 'grid',
     gridArea: 'article',
     gridTemplate: '"articlel article articler"',
-    gap: '0.5rem',
-    gridTemplateColumns: '192px auto 192px',
+    gap: '2rem',
+    gridTemplateColumns: '220px auto 300px',
+    borderLeft: '1px solid lightgrey',
+    borderRight: '1px solid lightgrey',
+    paddingRight: '2rem',
 };
 
 const Article = () => {
     return (
         <div style={articleLayout}>
             <div style={{ gridArea: 'articlel' }}></div>
-            <div style={{ gridArea: 'article' }}>
+            <div style={{ gridArea: 'article', borderLeft: '1px solid lightgrey', paddingLeft: '1rem' }}>
                 <Lorem />
             </div>
             <div style={{ gridArea: 'articler' }}>

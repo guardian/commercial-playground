@@ -58,11 +58,11 @@ const Sizes: { [key: string]: any } = {
 
 const SizeMappings: { [key: string]: any } = {
 	'top-above-nav': [
-		[[980,0]],
+		[980,0],
 		Sizes['top-above-nav'].desktop,
 	],
 	'right': [
-		[[0,0]],
+		[0,0],
 		Sizes['right'].desktop,
 	]
 }
