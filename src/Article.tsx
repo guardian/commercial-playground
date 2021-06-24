@@ -1,5 +1,6 @@
 import React from 'react';
 import { AdSlotRight } from './AdSlotRight';
+import { Lorem } from './Lorem';
 
 const articleLayout = {
     display: 'grid',
@@ -13,7 +14,9 @@ const Article = () => {
     return (
         <div style={articleLayout}>
             <div style={{ gridArea: 'articlel' }}></div>
-            <div style={{ gridArea: 'article' }}></div>
+            <div style={{ gridArea: 'article' }}>
+                <Lorem />
+            </div>
             <div style={{ gridArea: 'articler' }}>
                 <AdSlotRight />
             </div>
