@@ -5,10 +5,11 @@ interface Props {
     classNames: string,
     dataAttributes: string[][],
     slotId: string,
-    slotName: string
+    slotName: string,
+    styles?: React.CSSProperties,
 }
 
-const AdSlot = ({ classNames, dataAttributes, slotId, slotName}: Props) => {
+const AdSlot = ({ classNames, dataAttributes, slotId, slotName, styles}: Props) => {
     const [isLoading, ] = useDisplayAd(slotId, slotName);
     return (
         <div
@@ -16,9 +17,10 @@ const AdSlot = ({ classNames, dataAttributes, slotId, slotName}: Props) => {
             className={classNames}
             data-name={slotName}
             aria-hidden='true'
+            style={styles}
         >
-            {slotName} loading: {String(isLoading)}
         </div>
+        // {slotName} loading: {String(isLoading)}
     )
 }
 

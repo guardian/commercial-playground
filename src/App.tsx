@@ -7,8 +7,8 @@ import { Nav } from './Nav'
 function App() {
   return (
     <Layout>
-      <Nav />
       <Header />
+      <Nav />
       <Article />
     </Layout>
   )
