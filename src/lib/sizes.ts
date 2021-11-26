@@ -55,6 +55,14 @@ const Sizes: { [slot: string]: { [breakpoint: string]: AdSize[]} } = {
 			AdSizes.halfPage,
 			AdSizes.fluid,
 		]
+	},
+	'merchandising-high': {
+		'desktop': [
+			AdSizes.outOfPage,
+			AdSizes.empty,
+			AdSizes.merchandisingHigh,
+			AdSizes.fluid
+		]
 	}
 }
 
@@ -66,6 +74,10 @@ const SizeMappings: { [slot: string]: [AdSize, AdSize[]] } = {
 	'right': [
 		[0,0],
 		Sizes['right'].desktop,
+	],
+	'merchandising-high': [
+		[980,0],
+		Sizes['merchandising-high'].desktop,
 	]
 }
 
