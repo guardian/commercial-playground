@@ -1,4 +1,6 @@
-const AdSizes = {
+type AdSize = [width: number, height: number] | 'fluid';
+
+const AdSizes: { [key: string]: AdSize } = {
 	// standard ad sizes
 	billboard : [970, 250],
 	leaderboard : [728,90],
@@ -24,7 +26,7 @@ const AdSizes = {
 	empty : [2,2],
 }
 
-const Sizes: { [key: string]: any } = {
+const Sizes: { [slot: string]: { [breakpoint: string]: AdSize[]} } = {
 	'top-above-nav': {
 		'desktop': [
 			AdSizes.outOfPage,
@@ -53,10 +55,18 @@ const Sizes: { [key: string]: any } = {
 			AdSizes.halfPage,
 			AdSizes.fluid,
 		]
+	},
+	'merchandising-high': {
+		'desktop': [
+			AdSizes.outOfPage,
+			AdSizes.empty,
+			AdSizes.merchandisingHigh,
+			AdSizes.fluid
+		]
 	}
 }
 
-const SizeMappings: { [key: string]: any } = {
+const SizeMappings: { [slot: string]: [AdSize, AdSize[]] } = {
 	'top-above-nav': [
 		[980,0],
 		Sizes['top-above-nav'].desktop,
@@ -64,6 +74,10 @@ const SizeMappings: { [key: string]: any } = {
 	'right': [
 		[0,0],
 		Sizes['right'].desktop,
+	],
+	'merchandising-high': [
+		[980,0],
+		Sizes['merchandising-high'].desktop,
 	]
 }
 

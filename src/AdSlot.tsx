@@ -7,10 +7,13 @@ interface Props {
     slotId: string,
     slotName: string,
     styles?: React.CSSProperties,
+    targeting?: {
+        [key: string]: string | string[],
+    }
 }
 
-const AdSlot = ({ classNames, dataAttributes, slotId, slotName, styles}: Props) => {
-    const [isLoading, ] = useDisplayAd(slotId, slotName);
+const AdSlot = ({ classNames, dataAttributes, slotId, slotName, styles, targeting }: Props) => {
+    const [isLoading, ] = useDisplayAd(slotId, slotName, targeting);
     return (
         <div
             id={slotId}
