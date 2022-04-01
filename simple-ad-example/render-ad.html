@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello GPT</title>
+    <!-- Load GTP. Once the library has fully loaded, it will process any queued commands in the googletag object. -->
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+    <script>
+        // Ensure GTP is available
+        window.googletag = window.googletag || {cmd: []};
+        // Queue commands to GTP
+        googletag.cmd.push(function() {
+          googletag
+            // Define an ad slot
+            // Ad unit path, size, div id
+            // Ad unit path follows the format /network-code/[parent-ad-unit-code/.../]ad-unit-code, where:
+            .defineSlot('/59666047/theguardian.com/world/article/ng', [300, 250], 'ad-slot')               
+            // add a service to the slot e.g. pubads service
+            .addService(googletag.pubads());
+            // enable all GPT services
+            googletag.enableServices();
+        });
+      </script>
+  </head>
+  <body>
+    <div id="ad-slot" style="width: 300px; height: 250px;">
+        <script>
+          // Display the specified slot id
+          googletag.cmd.push(function() {
+            googletag.display('ad-slot');
+          });
+        </script>
+      </div>
+  </body>
+</html>
