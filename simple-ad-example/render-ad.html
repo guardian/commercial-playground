@@ -3,12 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>Hello GPT</title>
-    <!-- Load GTP. Once the library has fully loaded, it will process any queued commands in the googletag object. -->
+    <!-- Load Google Publisher Tag aka GPT or googletag -->
+    <!-- https://developers.google.com/publisher-tag/guides/get-started -->
+    <!-- Once GPT has loaded it will process any queued functions in the googletag.cmd array -->
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
-        // Ensure GTP is available
+        // Ensure window.googletag.cmd is available
         window.googletag = window.googletag || {cmd: []};
-        // Queue commands to GTP
+        // Queue commands to GPT
         googletag.cmd.push(function() {
           googletag
             // Define an ad slot
