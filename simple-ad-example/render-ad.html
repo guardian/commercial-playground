@@ -17,24 +17,30 @@
         }
         // Queue commands to GPT
         googletag.cmd.push(function() {
+          // Add page level custom targeting for all ads
+          // https://developers.google.com/publisher-tag/reference#googletag.PubAdsService_setTargeting
+          googletag.pubads()
+            .setTargeting('keywords', ['tutorial', 'intro', 'gpt'])
+            .setTargeting('visits', '24');
+
+          // Define an ad slot
           const slot = googletag
             // Define an ad slot with: ad unit path, sizes, div.id
             // https://developers.google.com/publisher-tag/reference#googletag.defineSlot
-            .defineSlot('/59666047/theguardian.com/world/article/ng', [Object.values(sizes)], 'ad-slot')               
-            // Add a service to the slot e.g. pubads service
-            .addService(googletag.pubads());
-          // Define size mappings i.e. desired ad sizes for given breakpoints
-          // https://developers.google.com/publisher-tag/guides/ad-sizes
-          slot.defineSizeMapping(
+            .defineSlot('/59666047/theguardian.com/world/article/ng', [Object.values(sizes)], 'ad-slot')
+            // Define size mappings i.e. desired ad sizes for given breakpoints
+            // https://developers.google.com/publisher-tag/guides/ad-sizes
+            .defineSizeMapping(
             [
               [[1024, 768], [sizes.billboard, sizes.leaderboard]],
               [[640, 480], [sizes.mpu]],
               [[0, 0], []]
-            ]
-          );
-          // Add slot level custom targeting
-          slot.setTargeting('keywords', ['tutorial', 'intro', 'gpt']);
-          slot.setTargeting('visits', '24');
+            ])
+            // Add slot level custom targeting
+            // https://developers.google.com/publisher-tag/reference#googletag.Slot_setTargeting
+            .setTargeting('slotId', 'top-above-nav')
+            // Add a service to the slot e.g. pubads service
+            .addService(googletag.pubads());
           // Enable all GPT services
           googletag.enableServices();
         });
