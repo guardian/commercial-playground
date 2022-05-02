@@ -10,17 +10,30 @@
     <script>
         // Ensure window.googletag.cmd is available
         window.googletag = window.googletag || {cmd: []};
+        const sizes = {
+          billboard: [970, 250],
+          leaderboard: [728, 90],
+          mpu: [300, 250],
+        }
         // Queue commands to GPT
         googletag.cmd.push(function() {
-          googletag
-            // Define an ad slot
-            // Ad unit path, size, div id
-            // Ad unit path follows the format /network-code/[parent-ad-unit-code/.../]ad-unit-code, where:
-            .defineSlot('/59666047/theguardian.com/world/article/ng', [300, 250], 'ad-slot')               
-            // add a service to the slot e.g. pubads service
+          const slot = googletag
+            // Define an ad slot with: ad unit path, sizes, div.id
+            // https://developers.google.com/publisher-tag/reference#googletag.defineSlot
+            .defineSlot('/59666047/theguardian.com/world/article/ng', [Object.values(sizes)], 'ad-slot')               
+            // Add a service to the slot e.g. pubads service
             .addService(googletag.pubads());
-            // enable all GPT services
-            googletag.enableServices();
+          // Define size mappings i.e. desired ad sizes for given breakpoints
+          // https://developers.google.com/publisher-tag/guides/ad-sizes
+          slot.defineSizeMapping(
+            [
+              [[1024, 768], [sizes.billboard, sizes.leaderboard]],
+              [[640, 480], [sizes.mpu]],
+              [[0, 0], []]
+            ]
+          );
+          // Enable all GPT services
+          googletag.enableServices();
         });
       </script>
   </head>
