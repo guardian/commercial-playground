@@ -32,6 +32,9 @@
               [[0, 0], []]
             ]
           );
+          // Add slot level custom targeting
+					slot.setTargeting('keywords', ['tutorial', 'intro', 'gpt']);
+					slot.setTargeting('visits', '24');
           // Enable all GPT services
           googletag.enableServices();
         });
