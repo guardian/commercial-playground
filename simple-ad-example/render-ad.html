@@ -3,27 +3,51 @@
   <head>
     <meta charset="utf-8">
     <title>Hello GPT</title>
-    <!-- Load GTP. Once the library has fully loaded, it will process any queued commands in the googletag object. -->
+    <!-- Load Google Publisher Tag aka GPT or googletag -->
+    <!-- https://developers.google.com/publisher-tag/guides/get-started -->
+    <!-- Once GPT has loaded it will process any queued functions in the googletag.cmd array -->
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
-        // Ensure GTP is available
+        // Ensure window.googletag.cmd is available
         window.googletag = window.googletag || {cmd: []};
-        // Queue commands to GTP
+        const sizes = {
+          billboard: [970, 250],
+          leaderboard: [728, 90],
+          mpu: [300, 250],
+        }
+        // Queue commands to GPT
         googletag.cmd.push(function() {
-          googletag
-            // Define an ad slot
-            // Ad unit path, size, div id
-            // Ad unit path follows the format /network-code/[parent-ad-unit-code/.../]ad-unit-code, where:
-            .defineSlot('/59666047/theguardian.com/world/article/ng', [300, 250], 'ad-slot')               
-            // add a service to the slot e.g. pubads service
+          // Add page level custom targeting for all ads
+          // https://developers.google.com/publisher-tag/reference#googletag.PubAdsService_setTargeting
+          googletag.pubads()
+            .setTargeting('keywords', ['tutorial', 'intro', 'gpt'])
+            .setTargeting('visits', '24');
+
+          // Define an ad slot
+          const slot = googletag
+            // Define an ad slot with: ad unit path, sizes, div.id
+            // https://developers.google.com/publisher-tag/reference#googletag.defineSlot
+            .defineSlot('/59666047/theguardian.com/world/article/ng', [Object.values(sizes)], 'ad-slot')
+            // Define size mappings i.e. desired ad sizes for given breakpoints
+            // https://developers.google.com/publisher-tag/guides/ad-sizes
+            .defineSizeMapping(
+            [
+              [[1024, 768], [sizes.billboard, sizes.leaderboard]],
+              [[640, 480], [sizes.mpu]],
+              [[0, 0], []]
+            ])
+            // Add slot level custom targeting
+            // https://developers.google.com/publisher-tag/reference#googletag.Slot_setTargeting
+            .setTargeting('slotId', 'top-above-nav')
+            // Add a service to the slot e.g. pubads service
             .addService(googletag.pubads());
-            // enable all GPT services
-            googletag.enableServices();
+          // Enable all GPT services
+          googletag.enableServices();
         });
       </script>
   </head>
   <body>
-    <div id="ad-slot" style="width: 300px; height: 250px;">
+    <div id="ad-slot">
         <script>
           // Display the specified slot id
           googletag.cmd.push(function() {
