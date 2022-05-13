@@ -1,13 +1,12 @@
-import React from 'react';
-import { AdSlotTopAboveNav } from './AdSlotTopAboveNav';
+import { Component } from "solid-js";
+import { AdSlotTopAboveNav } from "./AdSlotTopAboveNav";
 
-const Header = () => {
-    return (
-        <div style={{ gridArea: 'headerad' }}>
-            <AdSlotTopAboveNav />
-        </div>
-    )
+const Header: Component = () => {
+  return (
+    <div style={{ "grid-area": "headerad" }}>
+      <AdSlotTopAboveNav />
+    </div>
+  );
+};
 
-}
-
-export { Header }
+export { Header };

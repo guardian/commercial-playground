@@ -1,17 +1,17 @@
-import React from "react";
+import type { Component } from "solid-js";
 
-const Nav = () => {
-    return (
-        <div style={{
-            backgroundColor: '#052966',
-            gridArea: 'nav',
-            position: 'relative'
-        }}>
-            <div style={{ position: 'absolute', right: '4rem' }}>
-                <img src='/adian.png' width='360px' height='auto'></img>
-            </div>
-        </div>
-    )
-}
-
-export { Nav }
+export const Nav: Component = () => {
+  return (
+    <div
+      style={{
+        "background-color": "#052966",
+        "grid-area": "nav",
+        position: "relative",
+      }}
+    >
+      <div style={{ position: "absolute", right: "4rem" }}>
+        <img src="/adian.png" width="360px" height="auto"></img>
+      </div>
+    </div>
+  );
+};
