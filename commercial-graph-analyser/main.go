@@ -17,7 +17,7 @@ func makeRelativePath(frontendJsPath string, path string) string {
 	return frontendJsPath + "/bootstraps/" + path
 }
 
-func loadCommercialFiles(frontendJsPath string, frontendGraphPath string) ([]string, error) {
+func loadCommercialFiles(frontendJsPath string, frontendGraphPath string) (map[string]bool, error) {
 	jsonFile, err := os.Open(frontendGraphPath)
 
 	if err != nil {
@@ -39,10 +39,10 @@ func loadCommercialFiles(frontendJsPath string, frontendGraphPath string) ([]str
 		return nil, err
 	}
 
-	var commercialFiles = make([]string, len(graph))
+	var commercialFiles = make(map[string]bool)
 
-	for file := range graph {
-		commercialFiles = append(commercialFiles, makeRelativePath(frontendJsPath, file))
+	for path := range graph {
+		commercialFiles[makeRelativePath(frontendJsPath, path)] = true
 	}
 
 	return commercialFiles, nil
@@ -68,16 +68,9 @@ func loadFrontendJS(root string) ([]string, error) {
 	return files, err
 }
 
-func diffFiles(all []string, commercial []string) {
-	// Build a set of all the commercial files
-	// This is so we can do existence checks below
-	commercialSet := make(map[string]bool, len(commercial))
-	for _, c := range commercial {
-		commercialSet[c] = true
-	}
-
+func diffFiles(all []string, commercial map[string]bool) {
 	for _, a := range all {
-		isCommercial := commercialSet[a]
+		isCommercial := commercial[a]
 		if isCommercial {
 			fmt.Println(green(a))
 		} else {
