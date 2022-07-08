@@ -41,8 +41,12 @@ func loadCommercialFiles(frontendJsPath string, frontendGraphPath string) (map[s
 
 	var commercialFiles = make(map[string]bool)
 
-	for path := range graph {
+	for path, imports := range graph {
 		commercialFiles[makeRelativePath(frontendJsPath, path)] = true
+
+		for _, importPath := range imports {
+			commercialFiles[makeRelativePath(frontendJsPath, importPath)] = true
+		}
 	}
 
 	return commercialFiles, nil
@@ -68,15 +72,56 @@ func loadFrontendJS(root string) ([]string, error) {
 	return files, err
 }
 
+// Remove `.spec.` from the pathname
+func isCommercialSpec(commercial map[string]bool, path string) bool {
+	checkForSameExt := strings.Replace(path, ".spec.", ".", 1)
+	checkForTs := strings.Replace(path, ".spec.js", ".ts", 1)
+	checkForJs := strings.Replace(path, ".spec.ts", ".js", 1)
+	return commercial[checkForSameExt] || commercial[checkForTs] || commercial[checkForJs]
+}
+
+func isDeclaration(path string) bool {
+	return strings.HasSuffix(path, ".d.ts")
+}
+
+func isTs(path string) bool {
+	return strings.HasSuffix(path, "ts")
+}
+
 func diffFiles(all []string, commercial map[string]bool) {
-	for _, a := range all {
-		isCommercial := commercial[a]
-		if isCommercial {
-			fmt.Println(green(a))
+	totalFiles := len(all)
+	totalTsCount := 0
+	tsDeclaraionCount := 0
+	commercialCount := 0
+	commercialTsCount := 0
+
+	for _, path := range all {
+		if isTs(path) {
+			totalTsCount += 1
+		}
+
+		isCommercial := commercial[path]
+		// Mark all declaration files, as we can't be sure whether we'll need them or not
+		// At least from the import graph (since they aren't explicitly imported)
+		if isDeclaration(path) {
+			fmt.Println(yellow(path))
+			tsDeclaraionCount += 1
+		} else if isCommercial || isCommercialSpec(commercial, path) {
+			fmt.Println(green(path))
+			commercialCount += 1
+			if isTs(path) {
+				commercialTsCount += 1
+			}
 		} else {
-			fmt.Println(red(a))
+			fmt.Println(red(path))
 		}
 	}
+
+	fmt.Printf("\nDiff complete!\n")
+	fmt.Printf("Total files found: %d files (%d .ts files, %d .js files)\n", totalFiles, totalTsCount, totalFiles-totalTsCount)
+	fmt.Printf("Commercial files: %d files (%d .ts files, %d .js files)\n", commercialCount, commercialTsCount, commercialCount-commercialTsCount)
+	fmt.Printf("TS Declaration files: %d files\n", tsDeclaraionCount)
+	fmt.Printf("Can safely delete: %d files\n", totalFiles-commercialCount-tsDeclaraionCount)
 }
 
 func main() {
