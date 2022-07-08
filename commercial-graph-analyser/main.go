@@ -10,7 +10,14 @@ import (
 	"strings"
 )
 
-func loadCommercialFiles(frontendGraphPath string) ([]string, error) {
+func makeRelativePath(frontendJsPath string, path string) string {
+	if strings.HasPrefix(path, "../") {
+		return strings.Replace(path, "../", frontendJsPath+"/", 1)
+	}
+	return frontendJsPath + "/bootstraps/" + path
+}
+
+func loadCommercialFiles(frontendJsPath string, frontendGraphPath string) ([]string, error) {
 	jsonFile, err := os.Open(frontendGraphPath)
 
 	if err != nil {
@@ -35,14 +42,7 @@ func loadCommercialFiles(frontendGraphPath string) ([]string, error) {
 	var commercialFiles = make([]string, len(graph))
 
 	for file := range graph {
-		// Make path relative to the current directory
-		if strings.HasPrefix(file, "../") {
-			file = strings.Replace(file, "../", "../../../code/frontend/static/src/javascripts/", 1)
-		} else {
-			file = "../../../code/frontend/static/src/javascripts/bootstraps/" + file
-		}
-
-		commercialFiles = append(commercialFiles, file)
+		commercialFiles = append(commercialFiles, makeRelativePath(frontendJsPath, file))
 	}
 
 	return commercialFiles, nil
@@ -100,7 +100,7 @@ func main() {
 	}
 
 	// Load in the full set of commercial files
-	commercialFiles, err2 := loadCommercialFiles(frontendGraphPath)
+	commercialFiles, err2 := loadCommercialFiles(frontendJsPath, frontendGraphPath)
 
 	if err2 != nil {
 		fmt.Println(err2)
