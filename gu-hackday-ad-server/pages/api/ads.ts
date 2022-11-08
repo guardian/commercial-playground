@@ -20,7 +20,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  const slotName = (req.query["slotName"] ?? "") as string;
+  const targeting = req.query;
+  console.log(targeting);
+  const slotName = (targeting.slotName ?? "") as string;
 
   // Retrieve all of the campaigns
   const campaigns = await prisma.campaign.findMany({
