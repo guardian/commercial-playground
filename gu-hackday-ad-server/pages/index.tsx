@@ -1,15 +1,108 @@
-import { Badge, Card, Code, Dot, Page, Spacer, Table } from "@geist-ui/core";
+import {
+  Badge,
+  Card,
+  Code,
+  Dot,
+  Link,
+  Page,
+  Spacer,
+  Table,
+  Tabs,
+} from "@geist-ui/core";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { prisma } from "../src/prisma";
 import { Campaign, CampaignType, Label, Creative } from "@prisma/client";
 
+// Hack to get the through-relations
+type CampaignProp = Omit<
+  Campaign & {
+    type: CampaignType;
+    labels: Label[];
+    creatives: Creative[];
+  },
+  "created_at" | "updated_at"
+>;
+
+function CampaignTable({ campaigns }: { campaigns: CampaignProp[] }) {
+  return (
+    <div style={{ padding: "16px" }}>
+      <Table
+        data={campaigns.map((campaign) => ({
+          ...campaign,
+          type: campaign.type.name,
+          state: (
+            <>
+              <Dot style={{ marginRight: "15px" }} type="success" />
+              {campaign.state}
+            </>
+          ),
+          labels: (
+            <>
+              {campaign.labels.map((label) => (
+                <>
+                  <Badge style={{ backgroundColor: "blue" }}>
+                    {label.name}
+                  </Badge>{" "}
+                  <Spacer h={0.5} />
+                </>
+              ))}
+            </>
+          ),
+          creatives: (
+            <>
+              {campaign.creatives.map((creative) =>
+                creative.url !== "" ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    alt="..."
+                    key={creative.id}
+                    style={{
+                      padding: "4px",
+                      maxWidth: "150px",
+                      height: "auto",
+                    }}
+                    src={`http://localhost:3000/creatives/${creative.url}`}
+                  />
+                ) : (
+                  <Code>HTML / CSS</Code>
+                )
+              )}
+            </>
+          ),
+        }))}
+      >
+        <Table.Column prop="state" label="state" />
+        <Table.Column prop="id" label="id" />
+        <Table.Column prop="name" label="name" />
+        <Table.Column prop="type" label="Campaign Group" />
+        <Table.Column prop="labels" label="labels" />
+        <Table.Column prop="creatives" label="creatives" />
+      </Table>
+    </div>
+  );
+}
+
+function CampaignGroupMenu({
+  campaignTypes,
+}: {
+  campaignTypes: CampaignType[];
+}) {
+  return (
+    <div style={{ padding: "16px" }}>
+      {campaignTypes.map((campaignType) => (
+        <Card draggable={true} style={{ margin: "16px" }} key={campaignType.id}>
+          <Badge type="success">{campaignType.priority}</Badge>{" "}
+          {campaignType.name}
+        </Card>
+      ))}
+    </div>
+  );
+}
+
 type Props = {
-  campaigns: Omit<
-    Campaign & { type: CampaignType; labels: Label[]; creatives: Creative[] },
-    "created_at" | "updated_at"
-  >[];
+  campaigns: CampaignProp[];
   campaignTypes: CampaignType[];
 };
 
@@ -26,59 +119,18 @@ export default function Home({ campaigns, campaignTypes }: Props) {
       </Head>
 
       <Page>
-        <h1>🤑 gu-ad-server</h1>
-        <Table
-          data={campaigns.map((campaign) => ({
-            ...campaign,
-            type: campaign.type.name,
-            state: (
-              <>
-                <Dot style={{ marginRight: "15px" }} type="success" />
-                {campaign.state}
-              </>
-            ),
-            labels: (
-              <>
-                {campaign.labels.map((label) => (
-                  <>
-                    <Badge style={{ backgroundColor: "blue" }}>
-                      {label.name}
-                    </Badge>{" "}
-                    <Spacer h={0.5} />
-                  </>
-                ))}
-              </>
-            ),
-            creatives: (
-              <>
-                {campaign.creatives.map((creative) =>
-                  creative.url !== "" ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      alt="..."
-                      key={creative.id}
-                      style={{
-                        padding: "4px",
-                        maxWidth: "150px",
-                        height: "auto",
-                      }}
-                      src={`http://localhost:3000/creatives/${creative.url}`}
-                    />
-                  ) : (
-                    <Code>HTML / CSS</Code>
-                  )
-                )}
-              </>
-            ),
-          }))}
-        >
-          <Table.Column prop="state" label="state" />
-          <Table.Column prop="id" label="id" />
-          <Table.Column prop="name" label="name" />
-          <Table.Column prop="type" label="Campaign Group" />
-          <Table.Column prop="labels" label="labels" />
-          <Table.Column prop="creatives" label="creatives" />
-        </Table>
+        <header>
+          <h1>🤑 gu-ad-server</h1>
+        </header>
+
+        <Tabs initialValue="1">
+          <Tabs.Item label="Campaigns" value="1">
+            <CampaignTable campaigns={campaigns} />
+          </Tabs.Item>
+          <Tabs.Item label="Groups" value="2">
+            <CampaignGroupMenu campaignTypes={campaignTypes} />
+          </Tabs.Item>
+        </Tabs>
       </Page>
     </div>
   );
