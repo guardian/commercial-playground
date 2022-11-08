@@ -1,6 +1,6 @@
 import { Page } from "@geist-ui/core";
 import { Campaign, Label } from "@prisma/client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 async function getAd(slotName: string) {
   const res = await fetch(`http://localhost:3000/api/ads?slotName=${slotName}`);
@@ -9,14 +9,12 @@ async function getAd(slotName: string) {
     return;
   }
 
-  const { campaignId, url, labels } = (await res.json()) as {
+  const { campaignId, url, code, labels } = (await res.json()) as {
     campaignId: Campaign["id"];
     url: string;
+    code: string;
     labels: Label[];
   };
-
-  const img = document.createElement("img");
-  img.src = url;
 
   const slot = document.querySelector(`#${slotName}`);
 
@@ -24,15 +22,35 @@ async function getAd(slotName: string) {
     return;
   }
 
-  slot.appendChild(img);
+  if (url !== "") {
+    // Image based creative
+    const img = document.createElement("img");
+    img.src = url;
+    slot.appendChild(img);
+  } else if (code !== "") {
+    // Markup based creative
+    slot.innerHTML = code;
+  }
 }
 
 function AdSlot({ id }: { id: string }) {
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (!done) {
+      void getAd(id);
+      setDone(true);
+    }
+  }, [done, id]);
   return (
     <>
       <p>{id}</p>
       <div
-        style={{ backgroundColor: "#e3e3e3", padding: "8px", margin: "8px" }}
+        style={{
+          backgroundColor: "#e3e3e3",
+          padding: "8px",
+          margin: "8px",
+          display: "inline-block",
+        }}
         id={id}
       ></div>
     </>
@@ -40,12 +58,6 @@ function AdSlot({ id }: { id: string }) {
 }
 
 export default function TestPage() {
-  useEffect(() => {
-    void getAd("top-above-nav");
-  }, []);
-  useEffect(() => {
-    void getAd("inline");
-  }, []);
   return (
     <Page>
       <AdSlot id="top-above-nav" />
