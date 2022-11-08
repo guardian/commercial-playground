@@ -22,7 +22,11 @@ export default async function handler(
 ) {
   const targeting = req.query;
   console.log(targeting);
-  const slotName = (targeting.slotName ?? "") as string;
+  const slotName = targeting.slotName;
+
+  if (!slotName || Array.isArray(slotName)) {
+    return res.status(404).send({ error: "Slot name string required" });
+  }
 
   // Retrieve all of the campaigns
   const campaigns = await prisma.campaign.findMany({
@@ -40,7 +44,7 @@ export default async function handler(
   const campaign = campaignsWithMatchingCreatives[campaignIndex];
 
   if (!campaign) {
-    return res.status(404).send({ error: "Campaign not found " });
+    return res.status(404).send({ error: "Campaign not found" });
   }
 
   // Select a random creative in the winning campaign
@@ -51,7 +55,7 @@ export default async function handler(
     filteredCreatives[getRandomInt(filteredCreatives.length)];
 
   if (!creative) {
-    return res.status(404).send({ error: "Creative not found " });
+    return res.status(404).send({ error: "Creative not found" });
   }
 
   return res.send({
