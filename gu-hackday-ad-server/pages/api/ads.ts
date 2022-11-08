@@ -32,12 +32,9 @@ export default async function handler(
     campaign.creatives.find((creative) => creative.slots.includes(slotName))
   );
 
-  console.log(campaignsWithMatchingCreatives);
-
   // choose a campaign randomly
   // not taking into account priority just yet
   const campaignIndex = getRandomInt(campaignsWithMatchingCreatives.length);
-  console.log({ campaignIndex });
   const campaign = campaignsWithMatchingCreatives[campaignIndex];
 
   if (!campaign) {
