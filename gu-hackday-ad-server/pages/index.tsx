@@ -8,12 +8,23 @@ import {
   Spacer,
   Table,
   Tabs,
+  useTheme,
 } from "@geist-ui/core";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { prisma } from "../src/prisma";
-import { Campaign, CampaignType, Label, Creative, Targeting } from "@prisma/client";
+import {
+  Campaign,
+  CampaignType as BaseCampaignType,
+  Label,
+  Creative,
+  Targeting,
+} from "@prisma/client";
+
+type CampaignType = BaseCampaignType & {
+  Campaign: Campaign[];
+};
 
 // Hack to get the through-relations
 type CampaignProp = Omit<
@@ -98,14 +109,75 @@ function CampaignGroupMenu({
 }: {
   campaignTypes: CampaignType[];
 }) {
+  const theme = useTheme();
+  const colors = [
+    theme.palette.successLight,
+    theme.palette.successDark,
+    theme.palette.alert,
+    theme.palette.purple,
+    theme.palette.violet,
+    theme.palette.cyanLighter,
+  ];
+  const getColor = (id: number) => colors[id % colors.length];
   return (
     <div style={{ padding: "16px" }}>
-      {campaignTypes.map((campaignType) => (
-        <Card draggable={true} style={{ margin: "16px" }} key={campaignType.id}>
-          <Badge type="success">{campaignType.priority}</Badge>{" "}
-          {campaignType.name}
-        </Card>
-      ))}
+      {[...Array(10).keys()]
+        .map((i) => i + 1)
+        .map((index) => (
+          <Card draggable={true} style={{ margin: "16px" }} key={index}>
+            <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  borderRight: "1px solid grey",
+                  paddingRight: "16px",
+                  width: "5%",
+                }}
+              >
+                <Badge style={{ backgroundColor: "#AAA" }} type="success">
+                  {index}
+                </Badge>
+              </div>
+              <div style={{ width: "75%" }}>
+                {campaignTypes
+                  .filter((campaignType) => campaignType.priority === index)
+                  .map((campaignType) => (
+                    <div key={campaignType.id}>
+                      <Badge
+                        style={{
+                          backgroundColor: getColor(campaignType.id),
+                          marginLeft: "1rem",
+                          marginBottom: "1rem",
+                        }}
+                        type="success"
+                      >
+                        {campaignType.name}
+                      </Badge>
+                    </div>
+                  ))}
+              </div>
+              <div style={{ width: "20%", borderLeft: "1px solid grey" }}>
+                {campaignTypes
+                  .filter((campaignType) => campaignType.priority === index)
+                  .map((campaignType) =>
+                    campaignType.Campaign?.map((campaign) => (
+                      <div key={campaign.id}>
+                        <Badge
+                          style={{
+                            backgroundColor: getColor(campaign.id),
+                            marginLeft: "1rem",
+                            marginBottom: "1rem",
+                          }}
+                          type="success"
+                        >
+                          {campaign.name}
+                        </Badge>
+                      </div>
+                    ))
+                  )}
+              </div>
+            </div>
+          </Card>
+        ))}
     </div>
   );
 }
@@ -136,7 +208,7 @@ export default function Home({ campaigns, campaignTypes }: Props) {
           <Tabs.Item label="Campaigns" value="1">
             <CampaignTable campaigns={campaigns} />
           </Tabs.Item>
-          <Tabs.Item label="Groups" value="2">
+          <Tabs.Item label="Priority Groups" value="2">
             <CampaignGroupMenu campaignTypes={campaignTypes} />
           </Tabs.Item>
         </Tabs>
@@ -146,7 +218,21 @@ export default function Home({ campaigns, campaignTypes }: Props) {
 }
 
 export async function getServerSideProps(): Promise<{ props: Props }> {
-  const campaignTypes = await prisma.campaignType.findMany();
+  const campaignTypes = (
+    await prisma.campaignType.findMany({
+      include: { Campaign: true },
+    })
+  ).map((c) => ({
+    // This is a hack to avoid having to serialise the dates
+    id: c.id,
+    name: c.name,
+    priority: c.priority,
+    Campaign: c.Campaign.map((cam) => ({
+      ...cam,
+      created_at: null,
+      updated_at: null,
+    })),
+  }));
   const campaigns = (
     await prisma.campaign.findMany({
       include: { type: true, labels: true, creatives: true, targeting: true },
