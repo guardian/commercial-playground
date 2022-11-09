@@ -9,6 +9,8 @@ import {
   Table,
   Tabs,
   useTheme,
+  Toggle,
+  Tooltip,
 } from "@geist-ui/core";
 import Head from "next/head";
 import Image from "next/image";
@@ -44,21 +46,20 @@ function CampaignTable({ campaigns }: { campaigns: CampaignProp[] }) {
         data={campaigns.map((campaign) => ({
           ...campaign,
           type: campaign.type.name,
-          state: (
-            <>
-              <Dot style={{ marginRight: "15px" }} type="success" />
-              {campaign.state}
-            </>
+          name: (
+            <Tooltip text={campaign.state} type="dark">
+              {campaign.name}
+            </Tooltip>
           ),
           labels: (
             <>
               {campaign.labels.map((label) => (
-                <>
+                <Tooltip key={label.id} text={label.description} type="dark">
                   <Badge style={{ backgroundColor: "blue" }}>
                     {label.name}
                   </Badge>{" "}
                   <Spacer h={0.5} />
-                </>
+                </Tooltip>
               ))}
             </>
           ),
@@ -87,20 +88,26 @@ function CampaignTable({ campaigns }: { campaigns: CampaignProp[] }) {
             <>
               {campaign.targeting.map((targeting) => (
                 <div key={targeting.id}>
-                  {targeting.key}={targeting.value}
+                  <Badge type="secondary">
+                    <em>
+                      {targeting.key}={targeting.value}
+                    </em>
+                  </Badge>
                 </div>
               ))}
             </>
           ),
         }))}
       >
-        <Table.Column prop="state" label="state" />
-        <Table.Column prop="id" label="id" />
+        <Table.Column
+          prop="enabled"
+          render={() => <Toggle initialChecked={true} disabled={true} />}
+        />
         <Table.Column prop="name" label="name" />
         <Table.Column prop="type" label="Campaign Group" />
         <Table.Column prop="labels" label="labels" />
-        <Table.Column prop="creatives" label="creatives" />
         <Table.Column prop="targeting" label="targeting" />
+        <Table.Column prop="creatives" label="creatives" />
       </Table>
     </div>
   );
