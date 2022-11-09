@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Campaign {
+  id             Int           @id @default(autoincrement())
+  name           String
+  created_at     DateTime      @default(now())
+  updated_at     DateTime
+  state          CampaignState @default(Ready) // TODO Mark drafts as ready in UI
+  labels         Label[]
+  type           CampaignType  @relation(fields: [campaignTypeId], references: [id])
+  campaignTypeId Int
+  creatives      Creative[]
+  targeting      Targeting[]
+}
+
+enum CampaignState {
+  Draft
+  Ready
+  Delivering
+}
+
+model Label {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  Campaign    Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId  Int?
+}
+
+model CampaignType {
+  id       Int        @id @default(autoincrement())
+  name     String
+  priority Int        @default(10)
+  Campaign Campaign[]
+}
+
+model Creative {
+  id         Int       @id @default(autoincrement())
+  url        String
+  code       String
+  Campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId Int?
+  slots      String[]
+}
+
+enum TargetingOperator {
+  Equals
+  Contains
+  Not
+}
+
+model Targeting {
+  id         Int               @id @default(autoincrement())
+  key        String
+  operator   TargetingOperator
+  value      String
+  Campaign   Campaign?         @relation(fields: [campaignId], references: [id])
+  campaignId Int?
+}
