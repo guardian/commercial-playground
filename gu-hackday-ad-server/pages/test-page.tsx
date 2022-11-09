@@ -3,7 +3,7 @@ import { Campaign, Label } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 async function getAd(slotName: string) {
-  const res = await fetch(`http://localhost:3000/api/ads?slotName=${slotName}`);
+  const res = await fetch(`http://localhost:3032/api/ads?slotName=${slotName}`);
 
   if (!res.ok) {
     return;

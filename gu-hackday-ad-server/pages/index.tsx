@@ -13,7 +13,7 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { prisma } from "../src/prisma";
-import { Campaign, CampaignType, Label, Creative } from "@prisma/client";
+import { Campaign, CampaignType, Label, Creative, Targeting } from "@prisma/client";
 
 // Hack to get the through-relations
 type CampaignProp = Omit<
@@ -21,6 +21,7 @@ type CampaignProp = Omit<
     type: CampaignType;
     labels: Label[];
     creatives: Creative[];
+    targeting: Targeting[];
   },
   "created_at" | "updated_at"
 >;
@@ -63,7 +64,7 @@ function CampaignTable({ campaigns }: { campaigns: CampaignProp[] }) {
                       maxWidth: "150px",
                       height: "auto",
                     }}
-                    src={`http://localhost:3000/creatives/${creative.url}`}
+                    src={`http://localhost:3032/creatives/${creative.url}`}
                   />
                 ) : (
                   <Code>HTML / CSS</Code>
@@ -71,6 +72,13 @@ function CampaignTable({ campaigns }: { campaigns: CampaignProp[] }) {
               )}
             </>
           ),
+          targeting: (
+            <>
+              {campaign.targeting.map((targeting) =>
+                <div key={targeting.id}>{targeting.key}={targeting.value}</div>
+              )}
+            </>
+          )
         }))}
       >
         <Table.Column prop="state" label="state" />
@@ -79,6 +87,7 @@ function CampaignTable({ campaigns }: { campaigns: CampaignProp[] }) {
         <Table.Column prop="type" label="Campaign Group" />
         <Table.Column prop="labels" label="labels" />
         <Table.Column prop="creatives" label="creatives" />
+        <Table.Column prop="targeting" label="targeting" />
       </Table>
     </div>
   );
@@ -140,7 +149,7 @@ export async function getServerSideProps(): Promise<{ props: Props }> {
   const campaignTypes = await prisma.campaignType.findMany();
   const campaigns = (
     await prisma.campaign.findMany({
-      include: { type: true, labels: true, creatives: true },
+      include: { type: true, labels: true, creatives: true, targeting: true },
     })
   ).map((c) => ({
     // This is a hack to avoid having to serialise the dates
