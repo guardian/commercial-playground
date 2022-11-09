@@ -60,8 +60,11 @@ function AdSlot({ id }: { id: string }) {
 export default function TestPage() {
   return (
     <Page>
-      <AdSlot id="top-above-nav" />
-      <AdSlot id="inline" />
+      {["top-above-nav", "right", "inline", "mostpop", "comments"].map(
+        (slotId) => (
+          <AdSlot key={slotId} id={slotId} />
+        )
+      )}
     </Page>
   );
 }

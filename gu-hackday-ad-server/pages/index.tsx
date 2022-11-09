@@ -85,11 +85,13 @@ function CampaignTable({ campaigns }: { campaigns: CampaignProp[] }) {
           ),
           targeting: (
             <>
-              {campaign.targeting.map((targeting) =>
-                <div key={targeting.id}>{targeting.key}={targeting.value}</div>
-              )}
+              {campaign.targeting.map((targeting) => (
+                <div key={targeting.id}>
+                  {targeting.key}={targeting.value}
+                </div>
+              ))}
             </>
-          )
+          ),
         }))}
       >
         <Table.Column prop="state" label="state" />
