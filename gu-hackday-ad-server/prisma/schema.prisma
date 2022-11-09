@@ -17,6 +17,7 @@ model Campaign {
   type           CampaignType  @relation(fields: [campaignTypeId], references: [id])
   campaignTypeId Int
   creatives      Creative[]
+  targeting      Targeting[]
 }
 
 enum CampaignState {
@@ -47,4 +48,19 @@ model Creative {
   Campaign   Campaign? @relation(fields: [campaignId], references: [id])
   campaignId Int?
   slots      String[]
+}
+
+enum TargetingOperator {
+  Equals
+  Contains
+  Not
+}
+
+model Targeting {
+  id        Int       @id @default(autoincrement())
+  key       String
+  operator  TargetingOperator
+  value     String
+  Campaign  Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId Int?
 }
