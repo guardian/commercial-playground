@@ -24,3 +24,9 @@ a {
     background: black;
   }
 }
+
+.avatar {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 0 0 calc(-0.625 * 20px) !important;
+}

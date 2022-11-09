@@ -28,7 +28,7 @@ enum CampaignState {
 
 model Label {
   id          Int       @id @default(autoincrement())
-  name        String    @unique
+  name        String
   description String
   Campaign    Campaign? @relation(fields: [campaignId], references: [id])
   campaignId  Int?
@@ -57,10 +57,10 @@ enum TargetingOperator {
 }
 
 model Targeting {
-  id        Int       @id @default(autoincrement())
-  key       String
-  operator  TargetingOperator
-  value     String
-  Campaign  Campaign? @relation(fields: [campaignId], references: [id])
+  id         Int               @id @default(autoincrement())
+  key        String
+  operator   TargetingOperator
+  value      String
+  Campaign   Campaign?         @relation(fields: [campaignId], references: [id])
   campaignId Int?
 }
