@@ -14,6 +14,8 @@ import {
   useTheme,
   Toggle,
   Tooltip,
+  User,
+  Avatar,
 } from "@geist-ui/core";
 import Head from "next/head";
 import Image from "next/image";
@@ -234,19 +236,45 @@ export default function Home({ campaigns, campaignTypes }: Props) {
               alignItems: "baseline",
             }}
           >
-            <div style={{ marginBottom: "32px" }}>
-              <h1 style={{ display: "inline", marginRight: "16px" }}>
-                Courier
-              </h1>
-              <h2
+            <div style={{ marginBottom: "32px", width: "100%" }}>
+              <div
                 style={{
-                  display: "inline",
-                  fontSize: "22pt",
-                  color: "darkgray",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                [Messaging and campaign tool]
-              </h2>
+                <div>
+                  <h1 style={{ display: "inline", marginRight: "16px" }}>
+                    GamStack
+                  </h1>
+                  <h2
+                    style={{
+                      display: "inline",
+                      fontSize: "22pt",
+                      color: "darkgray",
+                    }}
+                  >
+                    [Messaging and campaign tool]
+                  </h2>
+                </div>
+                <div>
+                  <Avatar.Group style={{}}>
+                    <Avatar
+                      src="https://lh3.googleusercontent.com/a/ALm5wu3EteOnrLOVDEwEuOBVExDmbGTRRGwsV1GaeoJN=s64-p-k-rw-no"
+                      stacked
+                    />
+                    <Avatar
+                      src="https://lh3.googleusercontent.com/a/ALm5wu3QI1nD9MOflInxGmFdORkRjVRR-MnRb3qmhJFl=s88-w88-h88-c-k"
+                      stacked
+                    />
+                    <Avatar
+                      src="https://lh3.googleusercontent.com/a-/ACNPEu9vui-xaQQKBHarxgcBqxmCmtWSmkkUGRJS2SuJZA=s64-p-k-rw-no"
+                      stacked
+                    />
+                  </Avatar.Group>
+                </div>
+              </div>
             </div>
           </div>
         </header>
