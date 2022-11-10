@@ -29,3 +29,11 @@ Open Prisma Studio with
 ```bash
 yarn prisma studio
 ```
+
+## Running against Frontend & DCR
+
+Use this branch of Frontend to request and show ads from the local ad server:
+
+branch: https://github.com/guardian/frontend/tree/commercial-hackday-ad-server
+
+tree: https://github.com/guardian/frontend/tree/8ef45b9f1e948e061ad62ddb46ac9e11b87e8286
